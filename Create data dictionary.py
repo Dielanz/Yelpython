@@ -20,8 +20,8 @@ for x in range(len(filenames)):
     for y in columns_list[x]:
         column_set.add(y)    
 
-#Sort the det      
-column_set = sorted(column_set)        
+#Sort the set      
+column_set = sorted(column_set, key=lambda x : x[0].upper())        
 
 #Create an empty df        
 data_dict_df = pd.DataFrame(columns=column_set, index = filenames )    
