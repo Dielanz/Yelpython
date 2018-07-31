@@ -1,3 +1,6 @@
+#TODO: Add comments
+#Filters the yelp_business csv to only restaurants, appends income data, and filters to non-missing income attribute
+
 import pandas as pd
 from collections import Counter
 
@@ -16,15 +19,9 @@ def isRestaurant(row):
 
 yelp_business['isRestaurant'] = yelp_business['categories'].apply(isRestaurant)
 
-yelp_restaurants = yelp_business[yelp_business['isRestaurant']==1]
+yelp_restaurants = yelp_business[(pd.notnull(yelp_business['pop_income'])) & (yelp_business['is_open'] != 0) & (yelp_business['isRestaurant']==1)]
 
-del yelp_restaurants['isRestaurant']
-
-yelp_restaurants = yelp_restaurants[pd.notnull(yelp_restaurants['pop_income'])]
-
-yelp_restaurants = yelp_restaurants[yelp_restaurants['is_open'] != 0]
-
-yelp_restaurants = yelp_restaurants.drop(columns=['neighborhood', 'address', 'Unnamed: 0'])
+yelp_restaurants = yelp_restaurants.drop(columns=['isRestaurant','neighborhood', 'address', 'Unnamed: 0'])
 
 #yelp_restaurants.to_csv('yelp_restaurants.csv')
 
