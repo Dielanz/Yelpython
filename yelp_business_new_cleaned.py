@@ -24,7 +24,7 @@ yelp_restaurants = yelp_restaurants[pd.notnull(yelp_restaurants['pop_income'])]
 
 yelp_restaurants = yelp_restaurants[yelp_restaurants['is_open'] != 0]
 
-yelp_restaurants = yelp_restaurants.drop(columns=['neighborhood', 'address'])
+yelp_restaurants = yelp_restaurants.drop(columns=['neighborhood', 'address', 'Unnamed: 0'])
 
 yelp_restaurants.to_csv('yelp_restaurants.csv')
 
