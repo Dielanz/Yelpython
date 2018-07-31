@@ -5,7 +5,6 @@
 import pandas as pd
 from collections import Counter
 
-
 yelp_business = pd.read_csv('yelp_business.csv', usecols = ['business_id','name','stars','review_count','is_open','categories'])
 
 list_cat = [category for row in yelp_business['categories'] for category in row.split(';')]
