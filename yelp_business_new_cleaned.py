@@ -1,7 +1,7 @@
 import pandas as pd
 from collections import Counter
 
-yelp_business = pd.read_csv('yelp_business_new.csv')
+yelp_business = pd.read_csv('yelp_business_new.csv', index_col = 'business_id')
 
 list_cat = [category for row in yelp_business['categories'] for category in row.split(';')]
 
@@ -28,3 +28,8 @@ yelp_restaurants = yelp_restaurants.drop(columns=['neighborhood', 'address', 'Un
 
 yelp_restaurants.to_csv('yelp_restaurants.csv')
 
+yelp_hours = pd.read_csv('yelp_business_hours.csv', index_col = 'business_id')
+
+yelp_rest_hours = pd.merge(yelp_restaurants, yelp_hours, left_index = True, right_index = True)
+
+yelp_restaurants.to_csv('yelp_rest_hours.csv')
