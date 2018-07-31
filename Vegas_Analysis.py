@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 # Pull in yelp_business file
-dfYelp = pd.read_csv('yelp_business.csv', index_col = ("business_id"))
+dfYelp = pd.read_csv('yelp_restaurants.csv', index_col = ("business_id"))
 
 dfVegas = dfYelp[dfYelp["city"] == "Las Vegas"]
 
