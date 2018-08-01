@@ -29,31 +29,33 @@ yelp_restaurants = yelp_restaurants[pd.notnull(yelp_restaurants['pop_income'])]
 # Filter out any restaurant that is closed
 yelp_restaurants = yelp_restaurants[yelp_restaurants['is_open'] != 0]
 
-## Filter out those business from the business_hours, user, and review data as well
-
-yelp_hours = yelp_hours[yelp_hours.index.isin(yelp_restaurants.index)]
-yelp_reviews = yelp_reviews[yelp_reviews.index.get_level_values('business_id').isin(yelp_restaurants.index)]
-yelp_users = yelp_users[yelp_users.index.isin(yelp_reviews.index.get_level_values("user_id"))]
-
 ### Drop the unneccessary columns we will not be using for all files
 
 keepColumns = pd.read_csv("columnNames.csv") # Outputted and editted via "Create_ColumnNames_output.py"
 
-# Remove restaurant columns we don't want
-restaurantColumns = keepColumns[(keepColumns['file'] == "yelp_business") & keepColumns['keep']]
-yelp_restaurants = yelp_restaurants[restaurantColumns["columnName"]]
+def filterColumnsAndRows(dataframe, dfColumns, filetype, dfToFilterBy=None):
+    '''
+    This function is responsible for removing the specified columns and rows that we do not want in the data set
+    The non-needed columns are in the keepColumns dataframe
+    For data rows, we use indexing to remove the rows where that do not have a replicate index in the specified dataframe
+    '''
+    # Create filter columns using filetype input & columns set to true in keep column of dfColumns input file
+    filterColumns = dfColumns[(dfColumns['file'] == filetype) & dfColumns['keep']]
+    
+    if dfToFilterBy is None:  # If we are not given another dataframe to filter by, just filter the columns
+        return dataframe[filterColumns["columnName"]]
+    elif isinstance(dataframe.index, pd.core.index.MultiIndex): #If input dataframe is multi-indexed, just filter by first index 
+        return dataframe.loc[dataframe.index.get_level_values(0).isin(dfToFilterBy.index),filterColumns["columnName"]]    
+    elif isinstance(dfToFilterBy.index, pd.core.index.MultiIndex): #If the dataframe frame to index by is multi-indexed, filter by its' second index
+        return dataframe.loc[dataframe.index.isin(dfToFilterBy.index.get_level_values(1)),filterColumns["columnName"]]
+    else:
+        return dataframe.loc[dataframe.index.isin(dfToFilterBy.index),filterColumns["columnName"]]
 
-# Remove hours columns we don't want
-hoursColumns = keepColumns[(keepColumns['file'] == "yelp_business_hours") & keepColumns['keep']]
-yelp_hours = yelp_hours[hoursColumns["columnName"]]
-
-# Remove user columns we don't want
-userColumns = keepColumns[(keepColumns['file'] == "yelp_user") & keepColumns['keep']]
-yelp_users = yelp_users[userColumns["columnName"]]
-
-# Remove review columns we don't want
-reviewColumns = keepColumns[(keepColumns['file'] == "yelp_review") & keepColumns['keep']]
-yelp_reviews = yelp_reviews[reviewColumns["columnName"]]
+# Remove the columns and data that we don't want from each data set
+yelp_restaurants = filterColumnsAndRows(yelp_restaurants, keepColumns, "yelp_business")
+yelp_hours = filterColumnsAndRows(yelp_hours, keepColumns, "yelp_business_hours", yelp_restaurants)
+yelp_reviews = filterColumnsAndRows(yelp_reviews, keepColumns, "yelp_review", yelp_restaurants)
+yelp_users = filterColumnsAndRows(yelp_users, keepColumns, "yelp_user", yelp_reviews)
 
 # Merge the yelp_hours with yelp_restaurants
 
