@@ -63,7 +63,7 @@ yelp_restaurants = yelp_restaurants.replace(np.NaN,0)
 
 print(yelp_restaurants.columns.tolist())
 
-desired_columns_list = ['American (Traditional)','Sandwiches','Nightlife','Bars','Pizza','Mexican','Burgers','American (New)','Breakfast & Brunch','Italian','Chinese','Salad','Chicken Wings','Seafood','Cafes','Sports Bars','stars','review_count']
+desired_columns_list = ['American (Traditional)','Sandwiches','Bars','Pizza','Mexican','Burgers','American (New)','Breakfast & Brunch','Italian','Chinese','Salad','Chicken Wings','Seafood','Cafes','Sports Bars','stars','review_count']
 
 yelp_restaurants = yelp_restaurants[desired_columns_list]
 
@@ -73,8 +73,10 @@ yelp_restaurants = yelp_restaurants[desired_columns_list]
 
 import seaborn as sns
 corr = yelp_restaurants.corr()
-seaborn.set_pallete = sns.color_palette("RdBu_r", 7)
 sns.heatmap(corr, 
             xticklabels=corr.columns.values,
-            yticklabels=corr.columns.values)
+            yticklabels=corr.columns.values,
+            vmin = -1.000,
+            vmax = 1.000,
+            cmap=sns.color_palette("coolwarm",1000))
 
