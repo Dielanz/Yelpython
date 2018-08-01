@@ -2,10 +2,12 @@ import pandas as pd
 from collections import Counter
 
 # INPUT - Read in the data files we will be using
+# CSV Files needed in directory - yelp_business_new, yelp_business_hours, yelp_user, yelp_review, and columnNames
 yelp_business = pd.read_csv('yelp_business_new.csv', index_col = 'business_id')
 yelp_hours = pd.read_csv('yelp_business_hours.csv', index_col = 'business_id')
 yelp_users = pd.read_csv('yelp_user.csv', index_col = "user_id")
 yelp_reviews = pd.read_csv('yelp_review.csv', index_col = ("business_id","user_id"))
+keepColumns = pd.read_csv("columnNames.csv") # Outputted and editted via "Create_ColumnNames_output.py"
 
 ## yelp_business > filter out any business is not a restaurant
 
@@ -30,8 +32,6 @@ yelp_restaurants = yelp_restaurants[pd.notnull(yelp_restaurants['pop_income'])]
 yelp_restaurants = yelp_restaurants[yelp_restaurants['is_open'] != 0]
 
 ### Drop the unneccessary columns we will not be using for all files
-
-keepColumns = pd.read_csv("columnNames.csv") # Outputted and editted via "Create_ColumnNames_output.py"
 
 def filterColumnsAndRows(dataframe, dfColumns, filetype, dfToFilterBy=None):
     '''
