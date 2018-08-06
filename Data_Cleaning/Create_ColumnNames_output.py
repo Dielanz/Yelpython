@@ -17,8 +17,10 @@ df_list = [pd.read_csv(filenames[x],nrows=nrows) for x in range(len(filenames))]
 #Create a list of columns for the output file
 columns_list = [df_list[x].columns.tolist() for x in range(len(filenames))]
 
+#Create an empty df with column names file, columnName, and keep
 data_dict_df = pd.DataFrame(columns=["file","columnName", "keep"])
 
+#Populate the data_dict_df with TRUE for every column and then we can set to TRUE manually
 for index in range(len(columns_list)):
     for column in range(len(columns_list[index])):
         if str(columns_list[index][column]) in ("business_id", "user_id"):
