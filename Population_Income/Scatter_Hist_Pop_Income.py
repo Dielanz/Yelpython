@@ -1,10 +1,14 @@
-import pandas as pd 
+# This program is using one of the output cleaned csv for futher analysis.
+# It futher prepares the data for the analysis, extracts values from tuples
+# converts strings to numeric and plots data to scatterplots and histograms
+
+import pandas as pd
 import matplotlib.pyplot as plt
 import math
 import numpy as np
 import seaborn as sns
 
-yelp_scatter = pd.read_csv('yelp_rest_hours.csv', index_col = 'business_id')
+yelp_scatter = pd.read_csv('yelp_restaurants_CLEANED.csv', index_col = 'business_id')
 
 #yelp_scatter = yelp_scatter.loc[:, ['stars', 'pop_income']]
 
@@ -39,4 +43,3 @@ for state in states:
     plt.title(state)
     mean = np.mean(yelp_state['stars'])
     print("The average star rating for "+str(state) +" is " + str(mean))
-    
