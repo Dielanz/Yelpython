@@ -10,7 +10,6 @@ yelp_reviews = pd.read_csv('yelp_review.csv', index_col = ("business_id","user_i
 keepColumns = pd.read_csv("columnNames.csv") # Outputted and editted via "Create_ColumnNames_output.py"
 
 ## yelp_business > filter out any business is not a restaurant
-
 list_cat = [category for row in yelp_business['categories'] for category in row.split(';')]
 
 #https://stackoverflow.com/questions/2600191/how-to-count-the-occurrences-of-a-list-item
@@ -23,6 +22,7 @@ yelp_business['isRestaurant'] = yelp_business['categories'].apply(isRestaurant)
 
 yelp_restaurants = yelp_business[yelp_business['isRestaurant']==1]
 
+#Delete unnecessary column
 del yelp_restaurants['isRestaurant']
 
 # Filter out any restuarant where we don't have income data
@@ -32,7 +32,6 @@ yelp_restaurants = yelp_restaurants[pd.notnull(yelp_restaurants['pop_income'])]
 yelp_restaurants = yelp_restaurants[yelp_restaurants['is_open'] != 0]
 
 ### Drop the unneccessary columns we will not be using for all files
-
 def filterColumnsAndRows(dataframe, dfColumns, filetype, dfToFilterBy=None):
     '''
     This function is responsible for removing the specified columns and rows that we do not want in the data set
@@ -58,10 +57,10 @@ yelp_reviews = filterColumnsAndRows(yelp_reviews, keepColumns, "yelp_review", ye
 yelp_users = filterColumnsAndRows(yelp_users, keepColumns, "yelp_user", yelp_reviews)
 
 # Merge the yelp_hours with yelp_restaurants
-
 yelp_rest_hours = pd.merge(yelp_restaurants, yelp_hours, left_index = True, right_index = True)
 
 # OUTPUT - all three cleaned files
 yelp_restaurants.to_csv('yelp_restaurants_CLEANED.csv')
 yelp_users.to_csv('yelp_users_CLEANED.csv')
 yelp_reviews.to_csv('yelp_reviews_CLEANED.csv')
+
