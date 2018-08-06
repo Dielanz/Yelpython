@@ -17,3 +17,23 @@ For CS 5010 final project
   *	Percentage of businesses open on Sunday (??????)
     *	Query: State by State
     *	Visual: Heat map
+
+* Presentation
+  * Introduction - What data, where we got it, talk on plan of attack
+    * Michael
+	 * Github Repo
+    * Dylan 
+	 * Preprocessing & Data Cleaning
+    * Will
+	 * Yelp by Population Income and State
+    * Ruslan
+	 * Text Analysis (Word Cloud, Sentiment Analysis)
+    * Zach
+  * Correlation Matrix 
+    * Dylan
+  * Vegas Subset of data
+    * Will
+  * Testing - Brief word on unit tests performed 
+    * Will
+  * Conclusion (suggestions for improvement) 
+    * Michael
