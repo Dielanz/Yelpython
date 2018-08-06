@@ -5,12 +5,11 @@ import matplotlib.pyplot as plt
 import statsmodels.api as sm
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
-res = pd.read_csv('yelp_restaurants_CLEANED.csv')
 rev = pd.read_csv('yelp_reviews_CLEANED.csv')
 usr = pd.read_csv('yelp_users_CLEANED.csv')
 
-top = pd.DataFrame(res[res['stars'] == 5]['business_id'])
-bot = pd.DataFrame(res[(res['stars'] == 1) | (res['stars'] == 1.5)]['business_id'])
+top = rev[rev['stars'] == 5].sample(n=10000)
+bot = rev[rev['stars'] == 1].sample(n=10000)
 
 def collectStrings(series):
     fullText = ''
@@ -18,12 +17,9 @@ def collectStrings(series):
         fullText += txt
     return fullText
 
-topR = pd.merge(rev, top, on='business_id', how='inner')
-botR = pd.merge(rev, bot, on='business_id', how='inner')
-
 txt = {}
-txt.update({'top': collectStrings(topR['text'])})
-txt.update({'bot': collectStrings(botR['text'])})
+txt.update({'top': collectStrings(top['text'])})
+txt.update({'bot': collectStrings(bot['text'])})
 for key, val in txt.items():
     print(str(key) + ': ')
     wc = wordcloud.WordCloud(max_font_size=40).generate(val)
@@ -42,10 +38,10 @@ sid = SentimentIntensityAnalyzer()
 high = pd.DataFrame(usr[usr['review_count'] > 68]['user_id'])
 low = pd.DataFrame(usr[usr['review_count'] == 1]['user_id'])
 
-highTop = pd.merge(pd.merge(rev, top, on='business_id', how='inner'), high, on='user_id', how='inner')
-highBot = pd.merge(pd.merge(rev, bot, on='business_id', how='inner'), high, on='user_id', how='inner')
-lowTop = pd.merge(pd.merge(rev, top, on='business_id', how='inner'), low, on='user_id', how='inner')
-lowBot = pd.merge(pd.merge(rev, bot, on='business_id', how='inner'), low, on='user_id', how='inner')
+highTop = pd.merge(rev[rev['stars'] == 5], high, on='user_id', how='inner').sample(n=10000)
+highBot = pd.merge(rev[rev['stars'] == 1], high, on='user_id', how='inner').sample(n=10000)
+lowTop = pd.merge(rev[rev['stars'] == 5], low, on='user_id', how='inner').sample(n=10000)
+lowBot = pd.merge(rev[rev['stars'] == 1], low, on='user_id', how='inner').sample(n=10000)
 
 pd.Series([x['compound'] for x in highTop['text'].apply(sid.polarity_scores)]).mean()
 pd.Series([x['compound'] for x in highBot['text'].apply(sid.polarity_scores)]).mean()
