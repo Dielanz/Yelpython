@@ -19,21 +19,21 @@ For CS 5010 final project
     *	Visual: Heat map
 
 * Presentation
-  * Introduction - What data, where we got it, talk on plan of attack
+  *	Introduction - What data, where we got it, talk on plan of attack
     * Michael
-	 * Github Repo
+  *	Github Repo
     * Dylan 
-	 * Preprocessing & Data Cleaning
+  *	Preprocessing & Data Cleaning
     * Will
-	 * Yelp by Population Income and State
+  *	Yelp by Population Income and State
     * Ruslan
-	 * Text Analysis (Word Cloud, Sentiment Analysis)
+  *	Text Analysis (Word Cloud, Sentiment Analysis)
     * Zach
-  * Correlation Matrix 
+  *	Correlation Matrix 
     * Dylan
-  * Vegas Subset of data
+  *	Vegas Subset of data
     * Will
-  * Testing - Brief word on unit tests performed 
+  *	Testing - Brief word on unit tests performed 
     * Will
-  * Conclusion (suggestions for improvement) 
+  *	Conclusion (suggestions for improvement) 
     * Michael
