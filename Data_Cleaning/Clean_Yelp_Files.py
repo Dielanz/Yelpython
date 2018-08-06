@@ -1,3 +1,9 @@
+# the purpose of this file is to read through all our datafiles
+# and clean them. We filter and remove restaurants that don't have
+# population and income data, which means that they are not US based. We also
+# filter out the closed businesses. And lastly we remove all the column
+# that are unnecessary for our analysis
+
 import pandas as pd
 from collections import Counter
 
@@ -16,7 +22,7 @@ list_cat = [category for row in yelp_business['categories'] for category in row.
 count_of_items = Counter(list_cat)
 
 def isRestaurant(row):
-    return 1 if 'Restaurants' in row.split(';') else 0 
+    return 1 if 'Restaurants' in row.split(';') else 0
 
 yelp_business['isRestaurant'] = yelp_business['categories'].apply(isRestaurant)
 
@@ -40,11 +46,11 @@ def filterColumnsAndRows(dataframe, dfColumns, filetype, dfToFilterBy=None):
     '''
     # Create filter columns using filetype input & columns set to true in keep column of dfColumns input file
     filterColumns = dfColumns[(dfColumns['file'] == filetype) & dfColumns['keep']]
-    
+
     if dfToFilterBy is None:  # If we are not given another dataframe to filter by, just filter the columns
         return dataframe[filterColumns["columnName"]]
-    elif isinstance(dataframe.index, pd.core.index.MultiIndex): #If input dataframe is multi-indexed, just filter by first index 
-        return dataframe.loc[dataframe.index.get_level_values(0).isin(dfToFilterBy.index),filterColumns["columnName"]]    
+    elif isinstance(dataframe.index, pd.core.index.MultiIndex): #If input dataframe is multi-indexed, just filter by first index
+        return dataframe.loc[dataframe.index.get_level_values(0).isin(dfToFilterBy.index),filterColumns["columnName"]]
     elif isinstance(dfToFilterBy.index, pd.core.index.MultiIndex): #If the dataframe frame to index by is multi-indexed, filter by its' second index
         return dataframe.loc[dataframe.index.isin(dfToFilterBy.index.get_level_values(1)),filterColumns["columnName"]]
     else:
@@ -63,4 +69,3 @@ yelp_rest_hours = pd.merge(yelp_restaurants, yelp_hours, left_index = True, righ
 yelp_restaurants.to_csv('yelp_restaurants_CLEANED.csv')
 yelp_users.to_csv('yelp_users_CLEANED.csv')
 yelp_reviews.to_csv('yelp_reviews_CLEANED.csv')
-
