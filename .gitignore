@@ -1,3 +1,5 @@
 *.csv
 *.pdf
 .spyproject/
+Vegas/__pycache__/Vegas_Analysis.cpython-36.pyc
+Vegas/__pycache__/Vegas_functions.cpython-36.pyc
