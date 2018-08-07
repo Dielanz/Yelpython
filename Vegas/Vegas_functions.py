@@ -1,3 +1,5 @@
+#Used in Vegas_Analysis to sum occurrences of restaurant categories in yelp_business_CLEANED dataset and a few other calculations
+
 import pandas as pd
 
 def sumCategoryData(dataframe):    

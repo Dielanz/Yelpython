@@ -84,6 +84,8 @@ ax0.legend().set_visible(False)
 #####################################################################################
 ############################ Sentiment Analysis #####################################
 
+#The following is based on the yelp_text_analysis file, but for Vegas data only 
+
 sid = SentimentIntensityAnalyzer()
 
 top = pd.DataFrame(dfVegasReview_filtered[dfVegasReview_filtered['stars'] == 5])
@@ -92,15 +94,24 @@ bot = pd.DataFrame(dfVegasReview_filtered[(dfVegasReview_filtered['stars'] == 1)
 top = top.sample(10000)
 bot = bot.sample(10000)
 
+#Defines a function that concatenates the item of a pd series into one string
+# to create the wordcloud
 def collectStrings(series):
     fullText = ''
     for txt in list(series):
         fullText += txt
     return fullText
 
+#Create empty dictionary 
 txt = {}
+
+#Populate the dictionary with 5 star review text
 txt.update({'top': collectStrings(top['text'])})
+
+#Populate the dictionary with 1 star review text
 txt.update({'bot': collectStrings(bot['text'])})
+
+#Code to create the wordcloud
 for key, val in txt.items():
     print(str(key) + ': ')
     wc = wordcloud.WordCloud(max_font_size=40).generate(val)
@@ -111,15 +122,18 @@ for key, val in txt.items():
     plt.savefig(str(key) + '.png')
     plt.show()
 
+#Create dataframes of users similar to the data used in the histograms above (1 review and more than 68)
 high = pd.Series(dfVegasUser_filtered[dfVegasUser_filtered['review_count'] > 68].index)
 low = pd.Series(dfVegasUser_filtered[dfVegasUser_filtered['review_count'] == 1].index)
 
+#Split the two groups into four by adding the 5 star or 1 star dimension
 highTop = top.loc[top.index.get_level_values(1).isin(high)]
 highBot = bot.loc[bot.index.get_level_values(1).isin(high)]
 
 lowTop = top.loc[top.index.get_level_values(1).isin(low)]
 lowBot = bot.loc[bot.index.get_level_values(1).isin(low)]
 
+#Get the mean compound polarity score for each group above (highTop, highBot, lowTop, lowBot)
 pd.Series([x['compound'] for x in highTop['text'].apply(sid.polarity_scores)]).mean()
 pd.Series([x['compound'] for x in highBot['text'].apply(sid.polarity_scores)]).mean()
 pd.Series([x['compound'] for x in lowTop['text'].apply(sid.polarity_scores)]).mean()
