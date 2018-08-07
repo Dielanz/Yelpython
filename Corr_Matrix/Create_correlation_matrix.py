@@ -2,26 +2,38 @@
 import pandas as pd
 import numpy as np
 
+#This is useful to see more data in a dataframe when printing it to the console
 pd.set_option('display.max_rows', 10000)
 
+#Read in cleaned data
 yelp_restaurants = pd.read_csv('yelp_restaurants_CLEANED.csv')
 
+#Create a list of distinct categories
 categories_set = sorted(set([category for row in yelp_restaurants['categories'] for category in row.split(';')]))
 
+#Remove the category restaurant (all )
 categories_set.remove('Restaurants')
 
+#To be used with pandas.apply to create a new column for every category in categories_set
 def createCategoryColumn(categories,category):
     category_list = categories.split(';')
     return 1 if category in category_list else np.NaN
 
+#Create a new column for every category in categories_set
 for category in categories_set:
     yelp_restaurants[category] = yelp_restaurants['categories'].apply(createCategoryColumn, category = category)
 
+#Create a dataframe of counts of each category of each restaurant (hence the np.NaN rather then 0 above)
+#Used reset index to make the categories a column again   
 counts_by_category = pd.DataFrame(yelp_restaurants.count()).reset_index()
 
+#Rename the columns of the counts_by_category df
 counts_by_category.columns = ['Category','Counts']
 
+#Sort the df by Counts
 counts_by_category.sort_values(by='Counts')
+
+#For the correlation matrix, we use the most frequently occuring categories
 
 #539                              Thai     386
 #500                              Soup     394
@@ -59,18 +71,22 @@ counts_by_category.sort_values(by='Counts')
 #32             American (Traditional)    3460
 #214                         Fast Food    3822
 
+#Replace NAs with zeros
 yelp_restaurants = yelp_restaurants.replace(np.NaN,0)
 
-print(yelp_restaurants.columns.tolist())
+#print(yelp_restaurants.columns.tolist())
 
-desired_columns_list = ['American (Traditional)','Sandwiches','Bars','Pizza','Mexican','Burgers','American (New)','Breakfast & Brunch','Italian','Chinese','Salad','Chicken Wings','Seafood','Cafes','Sports Bars','stars','review_count']
+desired_columns_list = ['American (Traditional)','Sandwiches','Bars','Pizza','Mexican','Burgers','American (New)','Breakfast & Brunch','Italian','Chinese','Salad','Chicken Wings','Seafood','Cafes','Sports Bars','Stars','Review Count']
 
+#Subset data on desired columns to then feed to the correlation matrix
 yelp_restaurants = yelp_restaurants[desired_columns_list]
+
+#Rename stars and review_count to make the chart look a bit nicer
+yelp_restaurants = yelp_restaurants.rename(columns={'stars':'Stars','review_count':'Review Count'})
 
 #https://stackoverflow.com/questions/29432629/correlation-matrix-using-pandas
 
-#IN PROGRESS:
-
+#Creation of the heatmap (visualized correlation matrix)
 import seaborn as sns
 corr = yelp_restaurants.corr()
 sns.heatmap(corr, 
