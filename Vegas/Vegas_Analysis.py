@@ -1,5 +1,6 @@
 # Import libraries
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import wordcloud
 from Vegas_functions import sumCategoryData
@@ -123,3 +124,82 @@ pd.Series([x['compound'] for x in highTop['text'].apply(sid.polarity_scores)]).m
 pd.Series([x['compound'] for x in highBot['text'].apply(sid.polarity_scores)]).mean()
 pd.Series([x['compound'] for x in lowTop['text'].apply(sid.polarity_scores)]).mean()
 pd.Series([x['compound'] for x in lowBot['text'].apply(sid.polarity_scores)]).mean()
+
+#####################################################################################
+#####################################################################################
+#####################################################################################
+############################ Correlation Analysis ###################################
+
+#Create a list of distinct categories
+categories_set = sorted(set([category for row in dfVegas_filtered['categories'] for category in row.split(';')]))
+
+#Remove the category restaurant (all )
+categories_set.remove('Restaurants')
+
+#To be used with pandas.apply to create a new column for every category in categories_set
+def createCategoryColumn(categories,category):
+    category_list = categories.split(';')
+    return 1 if category in category_list else np.NaN
+
+#Create a new column for every category in categories_set
+for category in categories_set:
+    dfVegas_filtered[category] = dfVegas_filtered['categories'].apply(createCategoryColumn, category = category)
+
+#Create a dataframe of counts of each category of each restaurant (hence the np.NaN rather then 0 above)
+#Used reset index to make the categories a column again   
+counts_by_category = pd.DataFrame(dfVegas_filtered.count()).reset_index()
+
+#Rename the columns of the counts_by_category df
+counts_by_category.columns = ['Category','Counts']
+
+#Sort the df by Counts
+counts_by_category.sort_values(by='Counts')
+
+#To be used in testing
+#counts_by_category.to_csv('test_corr_matrix.csv')
+
+#For the correlation matrix, we use the most frequently occuring categories
+
+# 96	Food	365 # remove
+# 164	Nightlife	333 #Nightlife is no good bc it is a supercategory
+# 29	Bars	325
+# 16	American (Traditional)	278
+# 15	American (New)	229
+# 41	Breakfast & Brunch	208
+# 132	Italian	164
+# 198	Seafood	157
+# 154	Mexican	154
+# 180	Pizza	154
+# 133	Japanese	147
+# 195	Sandwiches	145
+# 46	Burgers	128
+# 60	Chinese	119
+# 215	Sushi Bars	118
+# 212	Steakhouses	116
+# 23	Asian Fusion	115
+
+
+#Replace NAs with zeros
+dfVegas_filtered = dfVegas_filtered.replace(np.NaN,0)
+
+#print(yelp_restaurants.columns.tolist())
+
+#Rename stars and review_count to make the chart look a bit nicer
+dfVegas_filtered = dfVegas_filtered.rename(columns={'stars':'Stars','review_count':'Review Count'})
+
+desired_columns_list = ['American (Traditional)','Sandwiches','Bars','Pizza','Mexican','Burgers','American (New)','Breakfast & Brunch','Italian','Chinese','Steakhouses','Sushi Bars','Seafood','Asian Fusion','Stars','Review Count']
+
+#Subset data on desired columns to then feed to the correlation matrix
+dfVegas_filtered = dfVegas_filtered[desired_columns_list]
+
+#https://stackoverflow.com/questions/29432629/correlation-matrix-using-pandas
+
+#Creation of the heatmap (visualized correlation matrix)
+import seaborn as sns
+corr = dfVegas_filtered.corr()
+sns.heatmap(corr, 
+            xticklabels=corr.columns.values,
+            yticklabels=corr.columns.values,
+            vmin = -1.000, #set the scale from -1 to 1
+            vmax = 1.000,
+            cmap=sns.color_palette("coolwarm",1000)) #Create the color palette
