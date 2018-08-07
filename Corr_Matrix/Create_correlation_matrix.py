@@ -33,6 +33,9 @@ counts_by_category.columns = ['Category','Counts']
 #Sort the df by Counts
 counts_by_category.sort_values(by='Counts')
 
+#To be used in testing
+#counts_by_category.to_csv('test_corr_matrix.csv')
+
 #For the correlation matrix, we use the most frequently occuring categories
 
 #539                              Thai     386
@@ -76,13 +79,13 @@ yelp_restaurants = yelp_restaurants.replace(np.NaN,0)
 
 #print(yelp_restaurants.columns.tolist())
 
+#Rename stars and review_count to make the chart look a bit nicer
+yelp_restaurants = yelp_restaurants.rename(columns={'stars':'Stars','review_count':'Review Count'})
+
 desired_columns_list = ['American (Traditional)','Sandwiches','Bars','Pizza','Mexican','Burgers','American (New)','Breakfast & Brunch','Italian','Chinese','Salad','Chicken Wings','Seafood','Cafes','Sports Bars','Stars','Review Count']
 
 #Subset data on desired columns to then feed to the correlation matrix
 yelp_restaurants = yelp_restaurants[desired_columns_list]
-
-#Rename stars and review_count to make the chart look a bit nicer
-yelp_restaurants = yelp_restaurants.rename(columns={'stars':'Stars','review_count':'Review Count'})
 
 #https://stackoverflow.com/questions/29432629/correlation-matrix-using-pandas
 
@@ -92,7 +95,7 @@ corr = yelp_restaurants.corr()
 sns.heatmap(corr, 
             xticklabels=corr.columns.values,
             yticklabels=corr.columns.values,
-            vmin = -1.000,
+            vmin = -1.000, #set the scale from -1 to 1
             vmax = 1.000,
-            cmap=sns.color_palette("coolwarm",1000))
+            cmap=sns.color_palette("coolwarm",1000)) #Create the color palette
 
