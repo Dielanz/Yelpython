@@ -24,16 +24,20 @@ txt.update({'top': collectStrings(top['text'])})
 txt.update({'bot': collectStrings(bot['text'])})
 for key, val in txt.items():
     print(str(key) + ': ')
-    wc = wordcloud.WordCloud(max_font_size=40).generate(val)
-    plt.figure(figsize=(12,9), facecolor='w')
-    plt.imshow(wc, interpolation="bilinear")
+    wc = wordcloud.WordCloud(max_font_size=40, background_color='white').generate(val)
+    plt.figure(figsize=(8,6), facecolor='w')
     plt.imshow(wc)
     plt.axis("off")
     plt.savefig(str(key) + '.png')
     plt.show()
 
-plt.hist(usr[usr['review_count'] == 1]['average_stars'])
-plt.hist(usr[usr['review_count'] > 68]['average_stars'])
+plt.hist(usr[usr['review_count'] == 1]['average_stars'], bins=10)
+plt.xlabel('Avg Rating')
+plt.ylabel('User Count')
+
+plt.hist(usr[usr['review_count'] > 68]['average_stars'], bins=10)
+plt.xlabel('Avg Rating')
+plt.ylabel('User Count')
 
 sid = SentimentIntensityAnalyzer()
 
