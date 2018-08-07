@@ -1,3 +1,5 @@
+# Text analysis program. Creates a wordcloud. And conducts a sentiment analysis.
+
 import numpy as np
 import pandas as pd
 import wordcloud
