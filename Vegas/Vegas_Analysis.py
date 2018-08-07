@@ -1,7 +1,9 @@
 # Import libraries
 import pandas as pd
 import matplotlib.pyplot as plt
+import wordcloud
 from Vegas_functions import sumCategoryData
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 # Pull in yelp_business file
 dfYelp = pd.read_csv('yelp_restaurants_CLEANED.csv', index_col = ("business_id"))
@@ -31,6 +33,11 @@ del dfYelpUser
 dfVegas_filtered = dfVegas[dfVegas["review_count"] > 100]
 dfVegasReview_filtered = dfVegasReview[dfVegasReview.index.get_level_values('business_id').isin(dfVegas_filtered.index)]
 dfVegasUser_filtered = dfVegasUser[dfVegasUser.index.isin(dfVegasReview_filtered.index.get_level_values("user_id"))]
+
+#####################################################################################
+#####################################################################################
+#####################################################################################
+########################## Category Data Analysis ###################################
 
 # Run the sumCategoryData
 categoryList_Vegas = sumCategoryData(dfVegas_filtered)
@@ -70,3 +77,49 @@ fig.suptitle('Vegas Reviews by Category', fontsize=14, fontweight='bold')
 # Hide the legends
 ax1.legend().set_visible(False)
 ax0.legend().set_visible(False)
+
+#####################################################################################
+#####################################################################################
+#####################################################################################
+############################ Sentiment Analysis #####################################
+
+sid = SentimentIntensityAnalyzer()
+
+top = pd.DataFrame(dfVegasReview_filtered[dfVegasReview_filtered['stars'] == 5])
+bot = pd.DataFrame(dfVegasReview_filtered[(dfVegasReview_filtered['stars'] == 1) | (dfVegasReview_filtered['stars'] == 1.5)])
+
+top = top.sample(10000)
+bot = bot.sample(10000)
+
+def collectStrings(series):
+    fullText = ''
+    for txt in list(series):
+        fullText += txt
+    return fullText
+
+txt = {}
+txt.update({'top': collectStrings(top['text'])})
+txt.update({'bot': collectStrings(bot['text'])})
+for key, val in txt.items():
+    print(str(key) + ': ')
+    wc = wordcloud.WordCloud(max_font_size=40).generate(val)
+    plt.figure(figsize=(12,9), facecolor='w')
+    plt.imshow(wc, interpolation="bilinear")
+    plt.imshow(wc)
+    plt.axis("off")
+    plt.savefig(str(key) + '.png')
+    plt.show()
+
+high = pd.Series(dfVegasUser_filtered[dfVegasUser_filtered['review_count'] > 68].index)
+low = pd.Series(dfVegasUser_filtered[dfVegasUser_filtered['review_count'] == 1].index)
+
+highTop = top.loc[top.index.get_level_values(1).isin(high)]
+highBot = bot.loc[bot.index.get_level_values(1).isin(high)]
+
+lowTop = top.loc[top.index.get_level_values(1).isin(low)]
+lowBot = bot.loc[bot.index.get_level_values(1).isin(low)]
+
+pd.Series([x['compound'] for x in highTop['text'].apply(sid.polarity_scores)]).mean()
+pd.Series([x['compound'] for x in highBot['text'].apply(sid.polarity_scores)]).mean()
+pd.Series([x['compound'] for x in lowTop['text'].apply(sid.polarity_scores)]).mean()
+pd.Series([x['compound'] for x in lowBot['text'].apply(sid.polarity_scores)]).mean()
