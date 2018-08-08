@@ -1,3 +1,7 @@
+# Group: yelPython
+# Members: Ruslan Askerov (ra7kv), Will Daniel (wkd9th), Zach Lynch (zsl2gf), Le Michael Song (ls2ywj), Dylan Weber (dew2ad)
+
+
 # Text analysis program. Creates a wordcloud. And conducts a sentiment analysis.
 
 import numpy as np

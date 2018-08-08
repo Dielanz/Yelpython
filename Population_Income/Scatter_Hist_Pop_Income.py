@@ -1,3 +1,7 @@
+# Group: yelPython
+# Members: Ruslan Askerov (ra7kv), Will Daniel (wkd9th), Zach Lynch (zsl2gf), Le Michael Song (ls2ywj), Dylan Weber (dew2ad)
+
+
 # This program is using one of the output cleaned csv for futher analysis.
 # It futher prepares the data for the analysis, extracts values from tuples
 # converts strings to numeric and plots data to scatterplots and histograms

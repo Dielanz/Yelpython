@@ -1,3 +1,7 @@
+# Group: yelPython
+# Members: Ruslan Askerov (ra7kv), Will Daniel (wkd9th), Zach Lynch (zsl2gf), Le Michael Song (ls2ywj), Dylan Weber (dew2ad)
+
+
 # the purpose of this file is to read through all our datafiles
 # and clean them. We filter and remove restaurants that don't have
 # population and income data, which means that they are not US based. We also

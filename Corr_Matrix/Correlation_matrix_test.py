@@ -1,3 +1,5 @@
+# Group: yelPython
+# Members: Ruslan Askerov (ra7kv), Will Daniel (wkd9th), Zach Lynch (zsl2gf), Le Michael Song (ls2ywj), Dylan Weber (dew2ad)
 
 #Unit testing the correlation matrix logic to get counts by category
 

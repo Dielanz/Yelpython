@@ -1,3 +1,5 @@
+# Group: yelPython
+# Members: Ruslan Askerov (ra7kv), Will Daniel (wkd9th), Zach Lynch (zsl2gf), Le Michael Song (ls2ywj), Dylan Weber (dew2ad)
 
 #This file is a throwaway, but it basically shows that the restaurant attributes file is not very useful
 

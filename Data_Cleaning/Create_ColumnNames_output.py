@@ -1,3 +1,7 @@
+# Group: yelPython
+# Members: Ruslan Askerov (ra7kv), Will Daniel (wkd9th), Zach Lynch (zsl2gf), Le Michael Song (ls2ywj), Dylan Weber (dew2ad)
+
+
 # creates a csv file for our clean_yelp_files.py program
 # it outputs a csv file with a "False" in front of each column. We then can
 # turn any columns to a "True" and our main datacleaning file will use them. 

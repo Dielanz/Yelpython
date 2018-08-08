@@ -1,3 +1,7 @@
+# Group: yelPython
+# Members: Ruslan Askerov (ra7kv), Will Daniel (wkd9th), Zach Lynch (zsl2gf), Le Michael Song (ls2ywj), Dylan Weber (dew2ad)
+
+
 # The purpose of this file is to scrape the city-data website,
 # get the population and per capita income from there, and
 # output new file with an additional column with tuples

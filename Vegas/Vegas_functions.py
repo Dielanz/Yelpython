@@ -1,4 +1,7 @@
-#Used in Vegas_Analysis to sum occurrences of restaurant categories in yelp_business_CLEANED dataset and a few other calculations
+# Group: yelPython
+# Members: Ruslan Askerov (ra7kv), Will Daniel (wkd9th), Zach Lynch (zsl2gf), Le Michael Song (ls2ywj), Dylan Weber (dew2ad)
+
+# Used in Vegas_Analysis to sum occurrences of restaurant categories in yelp_business_CLEANED dataset and a few other calculations
 
 import pandas as pd
 
