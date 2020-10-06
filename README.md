@@ -14,14 +14,15 @@ For CS 5010 final project
     *	Visual: a few visuals in powerpoint that show interesting facts about Vegas
   *	Web scraping Income Data (Ruslan & Michael)
     *	Query: Maybe seeing if there is a correlation between reviews and incomes of an area (does it matter?) 
-  *	Percentage of businesses open on Sunday (??????)
+  *	Percentage of businesses open on Sunday (Ruslan)
     *	Query: State by State
     *	Visual: Heat map
+
 
 * Presentation
   *	Introduction - What data, where we got it, talk on plan of attack
     * Michael
-  *	Github Repo
+  *	Github Repo set up and lunch and learn session on approval
     * Dylan 
   *	Preprocessing & Data Cleaning
     * Will
