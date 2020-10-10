@@ -25,6 +25,17 @@ list_cat = [category for row in yelp_business['categories'] for category in row.
 #https://stackoverflow.com/questions/2600191/how-to-count-the-occurrences-of-a-list-item
 count_of_items = Counter(list_cat)
 
+def summarize_dataframe(df):
+    """Summarize a dataframe, and report missing values."""
+    missing_values = pd.concat([pd.DataFrame(df.columns, columns=['Variable Name']), 
+                      pd.DataFrame(df.dtypes.values.reshape([-1,1]), columns=['Data Type']),
+                      pd.DataFrame(df.isnull().sum().values, columns=['Missing Values']), 
+                      pd.DataFrame([df[name].nunique() for name in df.columns], columns=['Unique Values'])], 
+                     axis=1).set_index('Variable Name')
+    with pd.option_context("display.max_rows", 1000):
+        display(pd.concat([missing_values, df.describe(include='all').transpose()], axis=1).fillna(""))
+
+
 def isRestaurant(row):
     return 1 if 'Restaurants' in row.split(';') else 0
 
